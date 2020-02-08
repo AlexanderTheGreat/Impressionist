@@ -52,9 +52,13 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 		glVertex2d(target.x + size * cos(area), target.y + size * sin(area));
 	}
 
+	glEnd();
+
 	// scattered circles around the center circle
 	for (int i = 0; i < 5; i++)
 	{
+		glBegin(GL_POLYGON);
+
 		length = (rand() % 30 + (-15)); // distance from center on x axis, consider putting this in for loop below
 		height = (rand() % 30 + (-15)); // distance from center on y axis, consider putting this in for loop below
 
@@ -64,17 +68,19 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 
 			// changing color to what is under the scattered circles, instead of under the cursor
 			colorChanger = target;
-			colorChanger.x = target.x + length + size * cos(area);
-			colorChanger.y = (target.y + size * sin(area)) + height;
+			colorChanger.x = target.x + length;	// this might be better
+			colorChanger.y = (target.y) + height;
+			//colorChanger.x = target.x + length + size * cos(area);  // causes odd color issues and might not be accurate
+			//colorChanger.y = (target.y + size * sin(area)) + height;
 			SetColor(colorChanger);
 
 			glVertex2d(target.x + length + size * cos(area), (target.y + size * sin(area)) + height);
 		}
+
+		glEnd();
 	}
 
-	printf("SCATTERED CIRCLE\n");	// DEBUGGING PURPOSES ONLY
-
-	glEnd();
+	//printf("SCATTERED CIRCLE\n");	// DEBUGGING PURPOSES ONLY
 }
 
 void ScatteredCircleBrush::BrushEnd(const Point source, const Point target)

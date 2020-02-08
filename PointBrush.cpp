@@ -8,51 +8,61 @@
 #include "impressionistDoc.h"
 #include "impressionistUI.h"
 #include "pointbrush.h"
+#include <iostream>
 
 extern float frand();
 
-PointBrush::PointBrush( ImpressionistDoc* pDoc, char* name ) :
-	ImpBrush(pDoc,name)
+PointBrush::PointBrush(ImpressionistDoc* pDoc, char* name) :
+	ImpBrush(pDoc, name)
 {
 }
 
-void PointBrush::BrushBegin( const Point source, const Point target )
+void PointBrush::BrushBegin(const Point source, const Point target)
 {
 	ImpressionistDoc* pDoc = GetDocument();
-	ImpressionistUI* dlg=pDoc->m_pUI;
-
+	ImpressionistUI* dlg = pDoc->m_pUI;
+	double alpha = pDoc->getAlpha();
 	int size = pDoc->getSize();
 
+	
 
+	glPointSize(size);
 
-	glPointSize( size );
-
-	BrushMove( source, target );
+	BrushMove(source, target);
 }
 
-void PointBrush::BrushMove( const Point source, const Point target )
+void PointBrush::BrushMove(const Point source, const Point target)
 {
 	ImpressionistDoc* pDoc = GetDocument();
-	ImpressionistUI* dlg=pDoc->m_pUI;
-	int alpha = pDoc->getAlpha();	// opacity
-	Point srcCopy = source;	// testing for opacity
+	ImpressionistUI* dlg = pDoc->m_pUI;
+	double alpha = pDoc->getAlpha();
 
-	if ( pDoc == NULL ) {
-		printf( "PointBrush::BrushMove  document is NULL\n" );
+	if (pDoc == NULL) {
+		printf("PointBrush::BrushMove  document is NULL\n");
 		return;
 	}
 
-	glBegin( GL_POINTS );
-		SetColor( source );
+	
+	glBegin(GL_POINTS);
+	SetColor(source);
 
-		glVertex2d( target.x, target.y );
-		
-		printf("POINTS\n");	// DEBUGGING PURPOSES ONLY
+	////// DOESNT WORK////////////////
+	/*
+	glAlphaFunc(GL_GREATER, alpha);
+	glEnable(GL_ALPHA_TEST); 
+	*/
+	//printf("ALPHA: %lf\n", alpha);
+	//////////////////////////////////
+
+	glVertex2d(target.x, target.y);
+
+
+	//printf("POINTS\n");	// DEBUGGING PURPOSES ONLY
 
 	glEnd();
 }
 
-void PointBrush::BrushEnd( const Point source, const Point target )
+void PointBrush::BrushEnd(const Point source, const Point target)
 {
 	// do nothing so far
 }

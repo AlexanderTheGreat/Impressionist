@@ -55,7 +55,7 @@ public:
 	ImpBrush*			m_pCurrentBrush;	
 	// Size of the brush.
 	int m_nSize;							
-
+	
 	ImpressionistUI*	m_pUI;
 
 // Operations

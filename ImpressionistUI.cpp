@@ -307,7 +307,7 @@ void ImpressionistUI::cb_angleSlides(Fl_Widget* o, void* v)
 //-----------------------------------------------------------
 void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nAlpha = int(((Fl_Slider*)o)->value()); // used to be m_nSize
+	((ImpressionistUI*)(o->user_data()))->m_nAlpha = double(((Fl_Slider*)o)->value()); // used to be m_nSize
 }
 
 //---------------------------------- per instance functions --------------------------------------
@@ -423,7 +423,7 @@ void ImpressionistUI::setAlpha(double alpha)
 	m_nAlpha = alpha;
 
 	if (alpha <= 1.0)
-		m_BrushAngleSlider->value(m_nAlpha);
+		m_BrushAlphaSlider->value(m_nAlpha);
 }
 
 // Main menu definition
@@ -548,17 +548,17 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushAngleSlider->callback(cb_angleSlides);
 
 		// Add brush alpha slider to the dialog 
-		m_BrushAngleSlider = new Fl_Value_Slider(10, 160, 300, 20, "Alpha");	//x-axis, y-axis, width, height, "name"
-		m_BrushAngleSlider->user_data((void*)(this));	// record self to be used by static callback functions
-		m_BrushAngleSlider->type(FL_HOR_NICE_SLIDER);
-		m_BrushAngleSlider->labelfont(FL_HELVETICA);	// FL_COURIER
-		m_BrushAngleSlider->labelsize(12);
-		m_BrushAngleSlider->minimum(0);
-		m_BrushAngleSlider->maximum(1.0);
-		m_BrushAngleSlider->step(0.01);
-		m_BrushAngleSlider->value(m_nAlpha);
-		m_BrushAngleSlider->align(FL_ALIGN_RIGHT);
-		m_BrushAngleSlider->callback(cb_alphaSlides);
+		m_BrushAlphaSlider = new Fl_Value_Slider(10, 160, 300, 20, "Alpha");	//x-axis, y-axis, width, height, "name"
+		m_BrushAlphaSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BrushAlphaSlider->type(FL_HOR_NICE_SLIDER);
+		m_BrushAlphaSlider->labelfont(FL_HELVETICA);	// FL_COURIER
+		m_BrushAlphaSlider->labelsize(12);
+		m_BrushAlphaSlider->minimum(0.0);
+		m_BrushAlphaSlider->maximum(1.0);
+		m_BrushAlphaSlider->step(0.01);
+		m_BrushAlphaSlider->value(m_nAlpha);
+		m_BrushAlphaSlider->align(FL_ALIGN_RIGHT);
+		m_BrushAlphaSlider->callback(cb_alphaSlides);
 
     m_brushDialog->end();	
 

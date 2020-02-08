@@ -31,7 +31,6 @@ public:
 	void RestoreContent();
 
 	ImpressionistDoc *m_pDoc;
-
 private:
 	GLvoid* m_pPaintBitstart;
 	int		m_nDrawWidth,

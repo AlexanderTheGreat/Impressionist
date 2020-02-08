@@ -7,6 +7,7 @@
 #include "impressionist.h"
 #include "impressionistDoc.h"
 #include "originalview.h"
+#include <iostream>
 
 #ifndef WIN32
 #define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
@@ -21,7 +22,6 @@ OriginalView::OriginalView(int			x,
 {
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
-
 }
 
 void OriginalView::draw()
@@ -74,9 +74,8 @@ void OriginalView::draw()
 		glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nWidth );
 		glDrawBuffer( GL_BACK );
 		glDrawPixels( drawWidth, drawHeight, GL_RGB, GL_UNSIGNED_BYTE, bitstart );
-
 	}
-			
+
 	glFlush();
 }
 
