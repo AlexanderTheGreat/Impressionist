@@ -101,6 +101,9 @@ void PaintView::draw()
 		Point source(coord.x + m_nStartCol, m_nEndRow - coord.y);
 		Point target(coord.x, m_nWindowHeight - coord.y);
 
+		Point beginning	= target;	// start point for dragging
+		Point end = target;	// start point for dragging
+
 		// This is the event handler
 		switch (eventToDo)
 		{
@@ -117,13 +120,15 @@ void PaintView::draw()
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
-
+			printf("RIGHT MOUSE DOWN\n");
+			beginning = target;
 			break;
 		case RIGHT_MOUSE_DRAG:
-
+			printf("RIGHT MOUSE DRAG\n");
 			break;
 		case RIGHT_MOUSE_UP:
-
+			printf("RIGHT MOUSE UP\n");
+			end = target;
 			break;
 
 		default:
@@ -182,6 +187,21 @@ int PaintView::handle(int event)
 	case FL_MOVE:
 		coord.x = Fl::event_x();
 		coord.y = Fl::event_y();
+
+		////////////MODIFIED/////////////////
+		// currently not working
+		// use source instead of target/coord
+		/*
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glDrawBuffer(GL_FRONT);
+		glBegin(GL_POINT);
+		gl_color('RED');
+		glPointSize(10);
+		glVertex2d(coord.x, coord.y);
+		std::cout << coord.x << ", " << coord.y << "\n";
+		glEnd();
+		*/
+		/////////////////////////////////////
 		break;
 	default:
 		return 0;
@@ -240,6 +260,6 @@ void PaintView::RestoreContent()
 		GL_UNSIGNED_BYTE,
 		m_pPaintBitstart);
 
-	//glDrawBuffer(GL_FRONT);
+	//glDrawBuffer(GL_FRONT);	// originally commented out
 	
 }

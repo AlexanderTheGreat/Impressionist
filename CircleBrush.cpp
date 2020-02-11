@@ -36,18 +36,20 @@ void CircleBrush::BrushMove(const Point source, const Point target)
 		return;
 	}
 
-	glBegin(GL_LINE_LOOP);
-
+	//glBegin(GL_LINE_LOOP);
+	glBegin(GL_POLYGON);	// best
+	//glBegin(GL_POINTS);
 	SetColor(source);
+	//while(size>=0) // works with points
+	//{
+		for (int radius = 0; radius < 720; radius++)
+		{
+			double area = 3.14 * (radius * radius); // pi * r^2
 
-	for (int radius = 0; radius < 720; radius++)
-	{
-		double area = 3.14 * (radius * radius); // pi * r^2
-
-		glVertex2d(target.x + size * cos(area) , target.y + size * sin(area));
-	}
-
-	printf("CIRCLE\n");	// DEBUGGING PURPOSES ONLY
+			glVertex2d(target.x + size * cos(area), target.y + size * sin(area));
+		}
+		//size--;	// works with points
+	//}
 
 	glEnd();
 }

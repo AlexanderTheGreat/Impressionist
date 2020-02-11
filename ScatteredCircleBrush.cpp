@@ -68,9 +68,9 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 
 			// changing color to what is under the scattered circles, instead of under the cursor
 			colorChanger = target;
-			colorChanger.x = target.x + length;	// this might be better
-			colorChanger.y = (target.y) + height;
-			//colorChanger.x = target.x + length + size * cos(area);  // causes odd color issues and might not be accurate
+			colorChanger.x = target.x + length;
+			colorChanger.y = target.y + height;
+			//colorChanger.x = target.x + length + size * cos(area);	// causes very odd issues with the polygon and its colors
 			//colorChanger.y = (target.y + size * sin(area)) + height;
 			SetColor(colorChanger);
 

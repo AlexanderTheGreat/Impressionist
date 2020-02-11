@@ -48,6 +48,7 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	int angle = pDoc->getAngle();
 	double radians = angle * PI / 180;
 	int thickness = pDoc->getThickness();
+	double alpha = pDoc->getAlpha();
 	int tempX = 0;
 	int tempY = 0;
 	Point topRight, topLeft, bottomRight, bottomLeft;	// points of the polygon that are modifyable
@@ -59,7 +60,6 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	}
 
 	glBegin(GL_POLYGON);
-
 	SetColor(source);
 	
 	// used to subtract from vertices to set origin to (0,0) (cursor)

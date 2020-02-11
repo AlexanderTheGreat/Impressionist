@@ -22,6 +22,7 @@
 #include "ScatteredPointBrush.h"
 #include "ScatteredLineBrush.h"
 #include "ScatteredUnfilledCircleBrush.h"
+#include "GaussianBlur.h"
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
 
@@ -48,6 +49,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new CircleBrush( this, "Circles" );
 	ImpBrush::c_pBrushes[BRUSH_UNFILLED_CIRCLES]
 		= new UnfilledCircleBrush(this, "Unfilled Circles");
+	ImpBrush::c_pBrushes[GAUSSIAN_BLUR]
+		= new GaussianBlur(this, "Gaussian Blur");
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]
 		= new ScatteredPointBrush(this, "Scattered Points");
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_LINES]		
