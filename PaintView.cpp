@@ -28,6 +28,10 @@
 static int		eventToDo;
 static int		isAnEvent = 0;
 static Point	coord;
+double startX = 0;
+double startY = 0;
+double endX = 0;
+double endY = 0;
 
 PaintView::PaintView(int			x,
 	int			y,
@@ -105,10 +109,7 @@ void PaintView::draw()
 		Point end = target;	// start point for dragging
 		double length = 0.0;
 		double angle = 0.0;
-		double startX = 0;
-		double startY = 0;
-		double endX = 0;
-		double endY = 0;
+		
 
 
 		// This is the event handler
@@ -143,9 +144,11 @@ void PaintView::draw()
 			std::cout << "end: " << endX << ", " << endY << "\n";
 			length = sqrt( ((endX-startX)*(endX - startX)) + ((endY - startY) * (endY - startY)) );	// using the distance formula to get the length of the start and end points
 			
-			std::cout << "first: " << (endX - startX) << "\n";
+			//std::cout << "endX: " << endX << ", startX: " << startX << "\n";
 
-			std::cout << "second: " << (endY - startY) << "\n";
+			//std::cout << "endx-startx: " << (endX - startX) << "\n";
+
+			//std::cout << "second: " << (endY - startY) << "\n";
 
 
 			std::cout << "nonsqrt: " <<  pow((endX - startX), 2) + pow((endY - startY), 2) << "\n";
