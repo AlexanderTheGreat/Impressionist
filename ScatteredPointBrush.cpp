@@ -23,7 +23,8 @@ void ScatteredPointBrush::BrushBegin(const Point source, const Point target)
 
 	int size = pDoc->getSize();
 
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glPointSize((float)size);
 
@@ -38,6 +39,8 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 	int length = 0;	// points' distance apart on x axis
 	int height = 0;	// points' distance apart on y axis
 	Point colorChanger;	// used to change color of circle into the color directly under the circle
+	double alpha = pDoc->getAlpha();
+	GLubyte alphaColor[4];
 
 	if (pDoc == NULL) {
 		printf("ScatteredPointBrush::BrushMove  document is NULL\n");
@@ -45,11 +48,6 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 	}
 
 	glBegin(GL_POINTS);
-	SetColor(source);
-
-	// center point
-	glVertex2d(target.x, target.y);
-
 
 	// scattered points around the center point
 	for (int i = 0; i < 5; i++)
@@ -63,9 +61,14 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 			colorChanger = target;
 			colorChanger.x = target.x + length + size;
 			colorChanger.y = (target.y + size) + height;
-			SetColor(colorChanger);
+			//SetColor(colorChanger);
 
-			glVertex2d(target.x + length, (target.y) + height);
+			// setting alpha and color
+			memcpy(alphaColor, pDoc->GetOriginalPixel(colorChanger), 3);	// copying the RGB values of the pixel to the first 3 indicies of alphaColor
+			alphaColor[3] = static_cast<GLubyte>(alpha * 255.0);	// setting the last index of alphaColor to the alpha value, casted as a ubyte
+			glColor4ubv(alphaColor);
+
+			glVertex2d(target.x + (length * 0.1 * size), (target.y) + (height * 0.1 * size));
 		}
 	}
 

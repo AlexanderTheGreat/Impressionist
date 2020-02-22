@@ -36,6 +36,8 @@ void LineBrush::BrushBegin(const Point source, const Point target)
 	//int size = pDoc->getSize();
 
 	//glPointSize((float)size);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	BrushMove(source, target);
 }
@@ -53,6 +55,7 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	int tempY = 0;
 	Point topRight, topLeft, bottomRight, bottomLeft;	// points of the polygon that are modifyable
 	topRight = topLeft = bottomRight = bottomLeft = target;
+	GLubyte alphaColor[4];
 
 	if (pDoc == NULL) {
 		printf("LineBrush::BrushMove  document is NULL\n");
@@ -60,7 +63,7 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	}
 
 	glBegin(GL_POLYGON);
-	SetColor(source);
+	//SetColor(source);
 	
 	// used to subtract from vertices to set origin to (0,0) (cursor)
 	tempX = target.x;
@@ -94,6 +97,11 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	angleModifier(topRight, radians);
 	angleModifier(bottomRight, radians);
 	
+	// setting alpha and color
+	memcpy(alphaColor, pDoc->GetOriginalPixel(source), 3);	// copying the RGB values of the pixel to the first 3 indicies of alphaColor
+	alphaColor[3] = static_cast<GLubyte>(alpha * 255.0);	// setting the last index of alphaColor to the alpha value, casted as a ubyte
+	glColor4ubv(alphaColor);
+
 	// adding back the initial values of x and y to re-translate the polygon back to its original spot, and then displaying the line
 	glVertex2d(bottomLeft.x + tempX, bottomLeft.y + tempY);	// bottom left
 	glVertex2d(topLeft.x + tempX, topLeft.y + tempY);	// top left

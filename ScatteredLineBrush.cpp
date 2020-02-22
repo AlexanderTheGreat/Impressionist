@@ -35,7 +35,8 @@ void ScatteredLineBrush::BrushBegin(const Point source, const Point target)
 
 	int size = pDoc->getSize();
 
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glPointSize((float)size);
 
@@ -57,6 +58,8 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 	Point topRight, topLeft, bottomRight, bottomLeft;	// points of the polygon that are modifyable
 	topRight = topLeft = bottomRight = bottomLeft = target;
 	Point colorChanger;	// used to change color of circle into the color directly under the circle
+	double alpha = pDoc->getAlpha();
+	GLubyte alphaColor[4];
 
 	if (pDoc == NULL) {
 		printf("ScatteredLineBrush::BrushMove  document is NULL\n");
@@ -111,13 +114,18 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 		colorChanger = target;
 		colorChanger.x = (target.x) + length;
 		colorChanger.y = target.y + height;
-		SetColor(colorChanger);
+		//SetColor(colorChanger);
+
+		// setting alpha and color
+		memcpy(alphaColor, pDoc->GetOriginalPixel(colorChanger), 3);	// copying the RGB values of the pixel to the first 3 indicies of alphaColor
+		alphaColor[3] = static_cast<GLubyte>(alpha * 255.0);	// setting the last index of alphaColor to the alpha value, casted as a ubyte
+		glColor4ubv(alphaColor);
 
 		// adding back the initial values of x and y to re-translate the polygon back to its original spot, and then displaying the line
-		glVertex2d((bottomLeft.x + tempX) + length, (bottomLeft.y + tempY) + height);	// bottom left
-		glVertex2d((topLeft.x + tempX) + length, (topLeft.y + tempY) + height);	// top left
-		glVertex2d((topRight.x + tempX) + length, (topRight.y + tempY) + height);	// top right
-		glVertex2d((bottomRight.x + tempX) + length, (bottomRight.y + tempY) + height);	// bottom right
+		glVertex2d((bottomLeft.x + tempX) + (length * 0.1 * size), (bottomLeft.y + tempY) + (height * 0.1 * size));	// bottom left
+		glVertex2d((topLeft.x + tempX) + (length * 0.1 * size), (topLeft.y + tempY) + (height * 0.1 * size));	// top left
+		glVertex2d((topRight.x + tempX) + (length * 0.1 * size), (topRight.y + tempY) + (height * 0.1 * size));	// top right
+		glVertex2d((bottomRight.x + tempX) + (length * 0.1 * size), (bottomRight.y + tempY) + (height * 0.1 * size));	// bottom right
 
 		glEnd();
 	}

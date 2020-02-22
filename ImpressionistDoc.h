@@ -38,6 +38,9 @@ public:
 	double	getAlpha();
 	void	setAlpha(double alpha);
 
+	void	gaussianBlur(char *iname);			// called by the UI to save image
+
+
 // Attributes
 public:
 	// Dimensions of original window.

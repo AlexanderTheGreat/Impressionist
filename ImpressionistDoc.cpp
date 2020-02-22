@@ -22,7 +22,6 @@
 #include "ScatteredPointBrush.h"
 #include "ScatteredLineBrush.h"
 #include "ScatteredUnfilledCircleBrush.h"
-#include "GaussianBlur.h"
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
 
@@ -49,8 +48,6 @@ ImpressionistDoc::ImpressionistDoc()
 		= new CircleBrush( this, "Circles" );
 	ImpBrush::c_pBrushes[BRUSH_UNFILLED_CIRCLES]
 		= new UnfilledCircleBrush(this, "Unfilled Circles");
-	ImpBrush::c_pBrushes[GAUSSIAN_BLUR]
-		= new GaussianBlur(this, "Gaussian Blur");
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]
 		= new ScatteredPointBrush(this, "Scattered Points");
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_LINES]		
@@ -239,3 +236,62 @@ GLubyte* ImpressionistDoc::GetOriginalPixel( const Point p )
 	return GetOriginalPixel( p.x, p.y );
 }
 
+void ImpressionistDoc::gaussianBlur(char* iname)
+{
+	const int w = 5;	// width of gaussian mask
+	const int h = 5;	// height of gaussian mask
+	int maskSum = 0;	// for our 5x5 mask it should be 273
+	int weightedAverage = 0;	//	'weighted average' of each pixel's neighborhood, with the average weighted more towards the value of the central pixels. 
+								//	Allows for a smoother image, in contrast to the mean filter's uniformly weighted average.
+	unsigned char* image = new unsigned char[m_nWidth * m_nHeight * 3];	// the post-gaussian blurred image
+	memset(image, 0, m_nWidth * m_nHeight * 3);
+
+	unsigned char gaussianMask[h][w] =
+	{
+		{01, 04, 07, 04, 01},
+		{04, 16, 26, 16, 04},
+		{07, 26, 41, 26, 07},
+		{04, 16, 26, 16, 04},
+		{01, 04, 07, 04, 01},
+	};
+
+	// going through the mask and getting the sum of all values
+	for (int i = 0; i < h; i++)
+	{
+		for (int j = 0; j < w; j++)
+		{
+			maskSum += gaussianMask[i][j];
+		}
+	}
+
+	// using convolution methods to create our gaussian blurred image
+	for (int rgb = 0; rgb < 3; rgb++)
+	{
+		for (int x = 0; x < m_nWidth; x++)
+		{
+			for (int y = 0; y < m_nHeight; y++)
+			{
+				for (int maskHeight = x; maskHeight < x + w; maskHeight++)
+				{
+					for (int maskWidth = y; maskWidth < y + h; maskWidth++)
+					{
+						weightedAverage += (GetOriginalPixel(maskHeight - 2, maskWidth - 2)[rgb] * gaussianMask[maskWidth - y][maskHeight - x]);
+					}
+				}
+				image[((3 * (y * m_nWidth + x)) + rgb)] = (weightedAverage / maskSum);
+
+				weightedAverage = 0;
+			}
+		}
+	}
+
+	m_ucBitmap = image;	// turns the source image on the left to the new gaussian blurred image
+
+	// display it on origView
+	m_pUI->m_origView->resizeWindow(m_nWidth, m_nHeight);
+	m_pUI->m_origView->refresh();
+
+	// refresh paint view as well
+	m_pUI->m_paintView->resizeWindow(m_nWidth, m_nHeight);
+	m_pUI->m_paintView->refresh();
+}

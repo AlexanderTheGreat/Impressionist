@@ -101,8 +101,15 @@ void PaintView::draw()
 		Point source(coord.x + m_nStartCol, m_nEndRow - coord.y);
 		Point target(coord.x, m_nWindowHeight - coord.y);
 
-		Point beginning	= target;	// start point for dragging
+		Point start	= target;	// start point for dragging
 		Point end = target;	// start point for dragging
+		double length = 0.0;
+		double angle = 0.0;
+		double startX = 0;
+		double startY = 0;
+		double endX = 0;
+		double endY = 0;
+
 
 		// This is the event handler
 		switch (eventToDo)
@@ -120,15 +127,26 @@ void PaintView::draw()
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
-			printf("RIGHT MOUSE DOWN\n");
-			beginning = target;
+			//printf("RIGHT MOUSE DOWN\n");
+			startX = target.x;
+			startY = target.y;
+
+			std::cout << "start: " << startX << ", " << startY << "\n";
 			break;
 		case RIGHT_MOUSE_DRAG:
-			printf("RIGHT MOUSE DRAG\n");
+			//printf("RIGHT MOUSE DRAG\n");
 			break;
 		case RIGHT_MOUSE_UP:
-			printf("RIGHT MOUSE UP\n");
-			end = target;
+			//printf("RIGHT MOUSE UP\n");
+			endX = target.x;
+			endY = target.y;
+			std::cout << "end: " << endX << ", " << endY << "\n";
+			length = sqrt( ((endX-startX)*(endX - startX)) + ((endY - startY) * (endY - startY)) );	// using the distance formula to get the length of the start and end points
+			
+			std::cout << "math: " << sqrt(((endX - startX) * (endX - startX)) + ((endY - startY) * (endY - startY))) << "\n";
+			
+			std::cout << "length: " << length << "\n";
+			//m_pDoc->setSize((int)length);
 			break;
 
 		default:
