@@ -143,8 +143,15 @@ void PaintView::draw()
 			std::cout << "end: " << endX << ", " << endY << "\n";
 			length = sqrt( ((endX-startX)*(endX - startX)) + ((endY - startY) * (endY - startY)) );	// using the distance formula to get the length of the start and end points
 			
-			std::cout << "math: " << sqrt(((endX - startX) * (endX - startX)) + ((endY - startY) * (endY - startY))) << "\n";
-			
+			std::cout << "first: " << (endX - startX) << "\n";
+
+			std::cout << "second: " << (endY - startY) << "\n";
+
+
+			std::cout << "nonsqrt: " <<  pow((endX - startX), 2) + pow((endY - startY), 2) << "\n";
+
+			std::cout << "math: " << sqrt( pow((endX - startX),2) + pow((endY - startY),2) ) << "\n";
+
 			std::cout << "length: " << length << "\n";
 			//m_pDoc->setSize((int)length);
 			break;
