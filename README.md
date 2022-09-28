@@ -4,4 +4,5 @@ An application that creates impressionist interpretations of a given image (need
 <img src="example.png">
 
 Example of the Gaussian Blur feature
+
 <img src="GaussianBlur.png">
