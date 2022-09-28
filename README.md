@@ -6,3 +6,7 @@ An application that creates impressionist interpretations of a given image (need
 Example of the Gaussian Blur feature
 
 <img src="GaussianBlur.png">
+
+Available brush types and brush settings
+
+<img src="BrushTypes.png">
